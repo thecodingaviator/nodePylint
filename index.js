@@ -34,10 +34,12 @@ app.get('/:code', (req, res, next) => {
                 console.log(fileName)
                 console.log(error)
             }
-            
+
             if (err) throw err;
             else {
                 // console.log('Result: ', results.toString());
+                results = results.toString()
+                results = results.substring(results.indexOf('OUTPUT STARTS HERE'))
                 res.send(results.toString())
             }
         }
