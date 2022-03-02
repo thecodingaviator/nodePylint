@@ -40,6 +40,7 @@ app.get('/:code', (req, res, next) => {
                 // console.log('Result: ', results.toString());
                 results = results.toString()
                 results = results.substring(results.indexOf('OUTPUT STARTS HERE'))
+                results = results.split(',', '\n')
                 res.send(results.toString())
             }
         }
