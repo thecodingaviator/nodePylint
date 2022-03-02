@@ -1,50 +1,47 @@
-const fs = require('fs');
+const fs = require("fs");
 
-const express = require('express');
+const express = require("express");
 const app = express();
 
-const he = require('he');
+let { PythonShell } = require("python-shell");
 
-let {PythonShell} = require('python-shell');
-
-app.get('/:code', (req, res, next) => {
-    
-    const fileName = './snake_' + Math.floor(100000 * Math.random()) + '.py';
-
-    fs.writeFile(fileName, he.decode(req.params.code), error => 
-        {
-            if (error) {
-            console.error(error);
-            return 'Error writing files';
-        }
-    })
-
-    const package_name = 'pylint'
-    const options = {
-        args : [package_name, fileName],
-    }
-
-    PythonShell.run('./install_package.py', options, 
-        function(err, results)
-        {
-            try {
-                fs.unlinkSync(fileName);
-                console.log(`File ${fileName} is deleted`)
-            } catch (error) {
-                console.log(fileName)
-                console.log(error)
-            }
-
-            if (err) throw err;
-            else {
-                // console.log('Result: ', results.toString());
-                results = results.toString()
-                results = results.substring(results.indexOf('OUTPUT STARTS HERE'))
-                res.send(results.toString())
-            }
-        }
-    )
+app.get("/", (req, res) => {
+  res.send("Use /code to test");
 });
 
-const port=8000;
-app.listen(port, ()=>console.log(`Server connected to ${port}`));
+app.get("/:code", (req, res, next) => {
+  const fileName = "./snake_" + Math.floor(100000 * Math.random()) + ".py";
+
+  fs.writeFile(fileName, req.params.code, (error) => {
+    if (error) {
+      console.error(error);
+      return "Error writing files";
+    }
+  });
+
+  const package_name = "pylint";
+  const options = {
+    args: [package_name, fileName],
+  };
+
+  PythonShell.run("./install_package.py", options, function (err, results) {
+    try {
+      fs.unlinkSync(fileName);
+      console.log(`File ${fileName} is deleted`);
+    } catch (error) {
+      console.log(fileName);
+      console.log(error);
+    }
+
+    if (err) throw err;
+    else {
+      // console.log('Result: ', results.toString());
+      results = results.toString();
+      results = results.substring(results.indexOf("OUTPUT STARTS HERE"));
+      res.send(results);
+    }
+  });
+});
+
+const port = 8000;
+app.listen(port, () => console.log(`Server connected to ${port}`));
