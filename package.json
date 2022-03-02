@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.3",
+    "he": "^1.2.0",
     "python-shell": "^3.0.1"
   }
 }
