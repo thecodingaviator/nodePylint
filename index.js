@@ -3,16 +3,24 @@ const fs = require("fs");
 const express = require("express");
 const app = express();
 
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+)
+
+app.use(express.json())
+
 let { PythonShell } = require("python-shell");
 
 app.get("/", (req, res) => {
   res.send("Use /code to test");
 });
 
-app.get("/:code", (req, res, next) => {
+app.get("/code", (req, res) => {
   const fileName = "./snake_" + Math.floor(100000 * Math.random()) + ".py";
 
-  fs.writeFile(fileName, req.params.code, (error) => {
+  fs.writeFile(fileName, req.body.code, (error) => {
     if (error) {
       console.error(error);
       return "Error writing files";
