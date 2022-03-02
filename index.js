@@ -7,11 +7,9 @@ const he = require('he');
 
 let {PythonShell} = require('python-shell');
 
-var package_name = 'pylint'
-
 app.get('/:code', (req, res, next) => {
-    console.log(req.params.code);
-    const fileName = './' + Math.floor(100000 * Math.random()) + '.py';
+    
+    const fileName = './snake_' + Math.floor(100000 * Math.random()) + '.py';
 
     fs.writeFile(fileName, he.decode(req.params.code), error => 
         {
@@ -21,17 +19,25 @@ app.get('/:code', (req, res, next) => {
         }
     })
 
-    let options = {
+    const package_name = 'pylint'
+    const options = {
         args : [package_name, fileName],
     }
 
     PythonShell.run('./install_package.py', options, 
         function(err, results)
         {
-            fs.unlink(fileName)
+            try {
+                fs.unlinkSync(fileName);
+                console.log(`File ${fileName} is deleted`)
+            } catch (error) {
+                console.log(fileName)
+                console.log(error)
+            }
+            
             if (err) throw err;
             else {
-                console.log('Result: ', results.toString());
+                // console.log('Result: ', results.toString());
                 res.send(results.toString())
             }
         }
