@@ -20,7 +20,21 @@ app.get("/", (req, res) => {
 app.post("/code", (req, res) => {
   const fileName = "./snake_" + Math.floor(100000 * Math.random()) + ".py";
 
-  fs.writeFile(fileName, req.body.code, (error) => {
+  let code = req.body.code;
+  // replace all \n with new lines
+  code = code.replace(/\\n/g, "\n");
+  // replace all \r with carriage returns
+  code = code.replace(/\\r/g, "\r");
+  // replace all \t with tabs
+  code = code.replace(/\\t/g, "\t");
+  // replace all \" with "
+  code = code.replace(/\\"/g, '"');
+  // replace all \' with '
+  code = code.replace(/\\'/g, "'");
+  // replace all \\ with \
+  code = code.replace(/\\\\/g, "\\");
+
+  fs.writeFile(fileName, code, (error) => {
     if (error) {
       console.error(error);
       return "Error writing files";
@@ -46,6 +60,9 @@ app.post("/code", (req, res) => {
       // console.log('Result: ', results.toString());
       results = results.toString();
       results = results.substring(results.indexOf("OUTPUT STARTS HERE"));
+      res.json({
+        code: results
+      })
       res.send(results);
     }
   });
