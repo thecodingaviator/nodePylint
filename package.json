@@ -1,7 +1,11 @@
 {
   "name": "nodepylint",
   "version": "1.0.0",
-  "description": "",
+  "description": "Expose pylint to the web using an API",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thecodingaviator/nodepylint.git"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
