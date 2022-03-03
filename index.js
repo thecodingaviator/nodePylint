@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
   res.send("Use /code to test");
 });
 
-app.get("/code", (req, res) => {
+app.post("/code", (req, res) => {
   const fileName = "./snake_" + Math.floor(100000 * Math.random()) + ".py";
 
   fs.writeFile(fileName, req.body.code, (error) => {
