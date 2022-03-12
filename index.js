@@ -3,6 +3,8 @@ const fs = require("fs");
 const express = require("express");
 const app = express();
 
+var cors = require('cors')
+
 app.use(
   express.urlencoded({
     extended: true
@@ -10,6 +12,8 @@ app.use(
 )
 
 app.use(express.json())
+
+app.use(cors())
 
 let { PythonShell } = require("python-shell");
 
